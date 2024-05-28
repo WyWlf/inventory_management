@@ -3,3 +3,8 @@
 3. run npm install
 4. run npm build
 5. run run preview
+
+# DATABASE -> inventory_management.sql
+1. download the file
+2. import it on xampp sql or mysql workbench
+3. start mysql
