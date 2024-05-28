@@ -8,3 +8,7 @@
 1. download the file
 2. import it on xampp sql or mysql workbench
 3. start mysql
+
+# default account credentials
+username: admin
+password: 111222
