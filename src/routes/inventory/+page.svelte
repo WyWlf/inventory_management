@@ -488,7 +488,6 @@
 					/>
 				</div>
 			</div>
-
 			<div class="flex flex-row items-center justify-between gap-4">
 				<Label for="files">Images:</Label>
 				<div class="flex flex-row items-center gap-4">
@@ -502,6 +501,8 @@
 					if (formValid(update_product_form).status) {
 						if (files.length > 0) {
 							update_product_form.images = await compile_image_blobs();
+						} else {
+							update_product_form.images = JSON.parse(update_product_form.images);
 						}
 						const response = await update_product(
 							update_product_form.product_brand,
