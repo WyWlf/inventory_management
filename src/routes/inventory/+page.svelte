@@ -5,6 +5,7 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { toast } from 'svelte-sonner';
 	import { Toaster } from '$lib/components/ui/sonner';
+	import { PackagePlus } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
 	import * as Pagination from '$lib/components/ui/pagination';
@@ -181,16 +182,6 @@
 		}
 	}
 
-	// function remove_item_from_original_array(value: string) {
-	// 	const index = original_unique_list.findIndex(
-	// 		(index: any) => index.item_name.toLowerCase() === value.toLowerCase()
-	// 	);
-	// 	if (index > -1) {
-	// 		original_unique_list.splice(index, 1);
-	// 		original_unique_list = original_unique_list;
-	// 	}
-	// }
-
 	function deep_copy_unique_list() {
 		return JSON.parse(JSON.stringify(current_unique_list));
 	}
@@ -200,13 +191,12 @@
 	}
 
 	onMount(async () => {
-		// await get_product_list_on_nav();
 		product_list_len = original_product_list.length;
 	});
 </script>
 
 <div class="flex w-full flex-col border-2 p-4">
-	<h1 class="ml-4 text-4xl font-bold">Products</h1>
+	<h1 class="ml-4 text-4xl font-bold">Inventory Management</h1>
 	<div class="my-8 ml-4 flex flex-row items-center gap-24">
 		<div class="flex flex-row items-center">
 			<Label for="email">Search</Label>
@@ -218,7 +208,7 @@
 			/>
 			<Button
 				variant="outline"
-				class="float-right m-4 max-xl:m-0"
+				class="float-right m-4 flex flex-row items-center justify-center gap-2 max-xl:m-0"
 				on:click={() => {
 					if (addProductDialog) {
 						addProductDialog = false;
@@ -227,7 +217,7 @@
 						addProductDialog = true;
 					}
 					clearForm();
-				}}>Add Product</Button
+				}}><PackagePlus size="20" /> Add Product</Button
 			>
 		</div>
 		<div class="flex flex-row items-center gap-2 max-xl:flex-wrap"></div>
@@ -465,7 +455,7 @@
 <Dialog.Root open={addProductDialog} closeOnEscape={true}>
 	<Dialog.Content>
 		<Dialog.Header class="pt-4">
-			<Dialog.Title>Add new Product</Dialog.Title>
+			<Dialog.Title>Add New Product</Dialog.Title>
 		</Dialog.Header>
 		<div class="grid gap-4 py-8">
 			<div class="flex flex-col gap-4">
@@ -560,7 +550,7 @@
 							description: formValid(add_product_form).msg
 						});
 					}
-				}}>Add Product</Button
+				}}>Add to inventory</Button
 			>
 		</Dialog.Footer>
 	</Dialog.Content>

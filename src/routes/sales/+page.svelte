@@ -7,8 +7,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { CircleDollarSign } from 'lucide-svelte';
-	import { Box } from 'lucide-svelte';
+	import { CalendarDays, Filter, X } from 'lucide-svelte';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
@@ -146,7 +145,9 @@
 		<div class="flex flex-row items-center gap-4 max-xl:flex-wrap">
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
-					<Button variant="outline">Date by: {filterOpt}</Button>
+					<Button variant="outline" class="flex flex-row items-center gap-2"
+						><CalendarDays size="20" />Date by: {filterOpt}</Button
+					>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
 					<DropdownMenu.Group>
@@ -206,44 +207,28 @@
 			{/if}
 			<Button
 				variant="outline"
-				class="float-right max-xl:m-0"
+				class="float-right flex flex-row items-center gap-2 max-xl:m-0"
 				on:click={() => {
 					formate_date();
-				}}>Filter</Button
+				}}><Filter size="20" />Filter</Button
 			>
 			<Button
 				variant="outline"
-				class="float-right max-xl:m-0"
+				class="float-right flex flex-row items-center gap-2 max-xl:m-0"
 				on:click={() => {
 					startDate = undefined;
 					endDate = undefined;
 					formatted_start_date = '';
 					formatted_end_date = '';
 					reload_sales_list();
-				}}>Clear Date</Button
+				}}><X size="20" />Clear Date</Button
 			>
 			<!-- <Button variant="outline" class="float-right max-xl:m-0" on:click={() => {}}
 				>Generate Chart</Button
 			> -->
 		</div>
-		<div class="mt-4 flex flex-col gap-4 w-full items-end float-right">
-			<div class="flex w-[15vw] flex-row items-center justify-between gap-8">
-				<span class="text-xl font-bold">Total Profit</span>
-				<span class=" flex flex-row items-center gap-2 text-xl">
-					<CircleDollarSign class="text-green-600 dark:text-green-300"></CircleDollarSign> PHP {total_cost.toFixed(
-						2
-					)}</span
-				>
-			</div>
-			<div class="flex w-[15vw] flex-row items-center justify-between gap-8">
-				<span class="text-xl font-bold">Total Items Sold</span>
-				<span class=" flex flex-row items-center gap-2 text-xl">
-					<Box class="text-blue-500 dark:text-blue-300"></Box> {total_units}</span
-				>
-			</div>
-		</div>
 	</div>
-	
+
 	<div class="flex max-h-[65vh] min-h-[50vh] border-2">
 		<Table.Root>
 			<Table.Caption>
@@ -317,6 +302,24 @@
 						</Table.Row>
 					{/each}
 				{/key}
+				<Table.Row class="border-none">
+					<Table.Cell class="font-medium"></Table.Cell>
+					<Table.Cell></Table.Cell>
+					<Table.Cell class="text-center"></Table.Cell>
+					<Table.Cell class="text-center"></Table.Cell>
+					<Table.Cell class="float-right flex flex-row items-center gap-4 text-right font-bold"
+						>Total Profit</Table.Cell
+					>
+					<Table.Cell class="text-right font-bold">PHP {total_cost.toFixed(2)}</Table.Cell>
+				</Table.Row>
+				<Table.Row>
+					<Table.Cell class="font-medium"></Table.Cell>
+					<Table.Cell></Table.Cell>
+					<Table.Cell class="text-center"></Table.Cell>
+					<Table.Cell class="text-center"></Table.Cell>
+					<Table.Cell class="text-right font-bold">Total Items Sold</Table.Cell>
+					<Table.Cell class="text-right font-bold">{total_units} unit/s</Table.Cell>
+				</Table.Row>
 			</Table.Body>
 		</Table.Root>
 	</div>

@@ -8,6 +8,15 @@
 	import { toggleMode } from 'mode-watcher';
 	import { page } from '$app/stores';
 	import Cookies from 'js-cookie';
+	import {
+		LayoutDashboard,
+		Boxes,
+		Users,
+		HandCoins,
+		NotepadText,
+		User,
+		DoorOpen
+	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	$: activeUrl = $page.url.pathname;
 	let load = false;
@@ -26,7 +35,7 @@
 			if (elapsedTime < duration) {
 				requestAnimationFrame(updateProgress);
 			} else {
-				progress_value = 100
+				progress_value = 100;
 				setTimeout(() => {
 					load = true;
 				}, 500);
@@ -38,11 +47,6 @@
 
 	onMount(() => {
 		windowInit = true;
-		// if ((activeUrl != '/' && Cookies.get('token') == null) || Cookies.get('token') == '') {
-		// 	window.location.href = '/logout';
-		// } else {
-		// 	startProgress();
-		// }
 	});
 
 	$: if (activeUrl) {
@@ -76,7 +80,7 @@
 					values="12;6;12"
 				/>
 			</circle>
-			<circle cx="12" cy="12" r="3" fill="#666362"  class="dark:fill-[#F8F8FF]">
+			<circle cx="12" cy="12" r="3" fill="#666362" class="dark:fill-[#F8F8FF]">
 				<animate
 					attributeName="cy"
 					begin="svgSpinners3DotsBounce0.begin+0.1s"
@@ -86,7 +90,7 @@
 					values="12;6;12"
 				/>
 			</circle>
-			<circle cx="20" cy="12" r="3" fill="gray"  class="dark:fill-[#F5FEFD]">
+			<circle cx="20" cy="12" r="3" fill="gray" class="dark:fill-[#F5FEFD]">
 				<animate
 					id="svgSpinners3DotsBounce1"
 					attributeName="cy"
@@ -98,7 +102,7 @@
 				/>
 			</circle>
 		</svg>
-		<Progress value={progress_value} class="max-w-[10vw]" />
+		<Progress value={progress_value} class="max-w-[25vw] max-lg:max-w-[40vw]" />
 		<span>Loading...</span>
 	</div>
 {:else}
@@ -108,42 +112,79 @@
 				<Button
 					variant="outline"
 					href="/dashboard"
-					class={activeUrl == '/dashboard' ? 'bg-blue-300 dark:bg-blue-700' : ''}>Dashboard</Button
+					class={activeUrl == '/dashboard'
+						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+						: 'flex flex-row items-center justify-center gap-2'}
+				>
+					<LayoutDashboard size="20" />
+					Dashboard</Button
 				>
 				<Button
 					variant="outline"
-					href="/products"
-					class={activeUrl == '/products' ? 'bg-blue-300 dark:bg-blue-700' : ''}>Products</Button
+					href="/inventory"
+					class={activeUrl == '/inventory'
+						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+						: 'flex flex-row items-center justify-center gap-2'}
+				>
+					<Boxes size="20" />
+					Inventory Management</Button
 				>
 				<Button
 					variant="outline"
 					href="/staff_management"
-					class={activeUrl == '/staff_management' ? 'bg-blue-300 dark:bg-blue-700' : ''}
-					>Staff Management</Button
+					class={activeUrl == '/staff_management'
+						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+						: 'flex flex-row items-center justify-center gap-2'}
+				>
+					<Users size="20" />
+					Staff Management</Button
 				>
 				<Button
 					variant="outline"
 					href="/sales"
-					class={activeUrl == '/sales' ? 'bg-blue-300 dark:bg-blue-700' : ''}>Sales History</Button
+					class={activeUrl == '/sales'
+						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+						: 'flex flex-row items-center justify-center gap-2'}
+				>
+					<HandCoins size="20" />
+					Sales History</Button
 				>
 				<Button
 					variant="outline"
 					href="/logs"
-					class={activeUrl == '/logs' ? 'bg-blue-300 dark:bg-blue-700' : ''}>Logs</Button
+					class={activeUrl == '/logs'
+						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+						: 'flex flex-row items-center justify-center gap-2'}
+				>
+					<NotepadText size="20" />
+					Logs</Button
 				>
 				<Button
 					variant="outline"
 					href="/account"
-					class={activeUrl == '/account' ? 'bg-blue-300 dark:bg-blue-700' : ''}>My Account</Button
+					class={activeUrl == '/account'
+						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+						: 'flex flex-row items-center justify-center gap-2'}
 				>
-				<Button variant="outline" href="/logout">Logout</Button>
+					<User size="20" />
+					My Account</Button
+				>
+				<Button
+					variant="outline"
+					class="flex flex-row items-center justify-center gap-2"
+					href="/logout"
+					data-sveltekit-preload-data="tap"
+				>
+					<DoorOpen size="20" />
+					Logout</Button
+				>
 			</div>
 			<ModeWatcher />
 			<Button
 				on:click={toggleMode}
 				variant="outline"
 				size="icon"
-				class="fixed bottom-0 right-0 m-8"
+				class="fixed bottom-0 right-0 z-[9999] m-8"
 			>
 				<Sun
 					class="h-[1.5rem] w-[1.5rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"

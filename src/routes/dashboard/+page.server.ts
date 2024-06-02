@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/connection'
-import { sales_history, product_table, inventory_history } from '$lib/schema'
+import { sales_history, product_table, inventory_history, inventory_cost } from '$lib/schema'
 import { asc, desc, eq, sql } from 'drizzle-orm';
 //@ts-ignore
 export const load = (async () => {
@@ -17,6 +17,8 @@ export const load = (async () => {
             revenue: sql<number>`SUM(${sales_history.total_cost})`,
             items_sold: sql<number>`SUM(${sales_history.units})`,
         }).from(sales_history)
+
+        const total_inventory_cost: any = await db.select().from(inventory_cost)
 
         const top_selling_metric: any = await db.select({
             item_name: sales_history.item_name,
@@ -45,7 +47,8 @@ export const load = (async () => {
             top_selling_metric,
             low_selling_metric,
             low_stock_metric,
-            events
+            events,
+            total_inventory_cost
         }
     }
     return {

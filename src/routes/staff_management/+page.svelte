@@ -4,6 +4,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { UserPlus } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
 	import * as Pagination from '$lib/components/ui/pagination';
@@ -162,7 +163,7 @@
 <div class="flex w-full flex-col border-2 p-4">
 	<h1 class="ml-4 text-4xl font-bold">Staff Management</h1>
 	<div class="my-8 ml-4 flex flex-row items-center gap-24">
-		<div class="flex flex-row items-center gap-8">
+		<div class="flex flex-row items-center gap-4">
 			<div class="flex flex-row items-center">
 				<Label for="email">Search</Label>
 				<Input
@@ -174,6 +175,7 @@
 			</div>
 			<Button
 				variant="outline"
+				class="flex flex-row items-center justify-center gap-2"
 				on:click={() => {
 					if (addStaffDialog) {
 						addStaffDialog = false;
@@ -181,7 +183,7 @@
 					} else {
 						addStaffDialog = true;
 					}
-				}}>Add New Staff</Button
+				}}><UserPlus size="20" />Add User</Button
 			>
 		</div>
 	</div>
@@ -425,7 +427,7 @@
 							description: validate_response.msg
 						});
 					}
-				}}>Add Staff</Button
+				}}>Add User</Button
 			>
 		</Dialog.Footer>
 	</Dialog.Content>

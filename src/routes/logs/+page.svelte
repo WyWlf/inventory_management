@@ -6,6 +6,7 @@
 	import { cn } from '$lib/utils.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
+	import { CalendarDays, Filter, X } from 'lucide-svelte';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
@@ -124,7 +125,9 @@
 		<div class="flex flex-row items-center gap-4 max-xl:flex-wrap">
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
-					<Button variant="outline">Date by: {filterOpt}</Button>
+					<Button variant="outline" class="flex flex-row items-center gap-2"
+						><CalendarDays size="20" />Date by: {filterOpt}</Button
+					>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
 					<DropdownMenu.Group>
@@ -184,21 +187,21 @@
 			{/if}
 			<Button
 				variant="outline"
-				class="float-right max-xl:m-0"
+				class="float-right flex flex-row items-center gap-2 max-xl:m-0"
 				on:click={() => {
 					formate_date();
-				}}>Filter</Button
+				}}><Filter size="20" />Filter</Button
 			>
 			<Button
 				variant="outline"
-				class="float-right max-xl:m-0"
+				class="float-right flex flex-row items-center gap-2 max-xl:m-0"
 				on:click={() => {
 					startDate = undefined;
 					endDate = undefined;
 					formatted_start_date = '';
 					formatted_end_date = '';
 					reload_log_list();
-				}}>Clear Date</Button
+				}}><X size="20" />Clear Date</Button
 			>
 		</div>
 	</div>

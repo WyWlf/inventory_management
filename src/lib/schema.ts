@@ -35,3 +35,8 @@ export const inventory_history = mySchema.table("inventory_history", {
     action: text("action"),
     time: date("time"),
 });
+
+export const inventory_cost = mySchema.table("inventory_cost", {
+    total_cost: int("total_cost")
+});
+

@@ -2,7 +2,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { CircleUser } from 'lucide-svelte';
+	import { CircleUser, KeyRound, Save } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import * as Card from '$lib/components/ui/card';
@@ -15,7 +15,8 @@
 		phone_number: string;
 	};
 	export let data: { data: { 0: acount_interface } };
-	let account: acount_interface = data.data[0];
+	const original_account_info = data.data[0];
+	let account: acount_interface = JSON.parse(JSON.stringify(data.data[0]));
 	let curr_password = '';
 	let new_password = '';
 	let re_entered_password = '';
@@ -100,44 +101,52 @@
 				<div class="mt-4 flex flex-row items-center justify-between gap-4">
 					<Button
 						variant="outline"
+						class="flex flex-row items-center gap-2"
 						on:click={() => {
 							changePassEnabled = !changePassEnabled;
 						}}
 					>
+						<KeyRound size="20" />
 						{!changePassEnabled ? 'Change Password' : 'Cancel Change Password'}
 					</Button>
 					<Button
 						variant="outline"
+						class="flex flex-row items-center gap-2"
 						on:click={async () => {
 							const response = password_validate();
 							if (response.status) {
-								const sql_response = await update_account_information(
-									account.full_name,
-									account.phone_number,
-									account.address,
-									curr_password,
-									new_password,
-									changePassEnabled
-								);
+								const newChanges = JSON.stringify(account) !== JSON.stringify(original_account_info)
+								if (newChanges) {
+									const sql_response = await update_account_information(
+										account.full_name,
+										account.phone_number,
+										account.address,
+										curr_password,
+										new_password,
+										changePassEnabled
+									);
 
-								if (sql_response.status == 200) {
-									toast.success('Action success', {
-										description: sql_response.msg
-									});
-									setTimeout(() => {
-										window.location.reload()
-									}, 500);
-								} else {
-									toast.error('Action failed', {
-										description: sql_response.msg
-									});
+									if (sql_response.status == 200) {
+										toast.success('Action success', {
+											description: sql_response.msg
+										});
+										setTimeout(() => {
+											window.location.reload();
+										}, 500);
+									} else {
+										toast.error('Action failed', {
+											description: sql_response.msg
+										});
+									}
 								}
 							} else {
 								toast.error('Action failed', {
 									description: response.msg
 								});
 							}
-						}}>Save Changes</Button
+						}}
+					>
+						<Save size="20" />Save Changes</Button
 					>
 				</div>
 			</Card.Content>

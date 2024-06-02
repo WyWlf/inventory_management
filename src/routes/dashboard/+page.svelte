@@ -1,21 +1,28 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import type { inventory_history } from '$lib/schema';
-	import { CircleDollarSign } from 'lucide-svelte';
+	import type { inventory_cost, inventory_history } from '$lib/schema';
+	import {
+		CircleDollarSign,
+		Flame,
+		NotepadText,
+		Package,
+		TrendingDown,
+		TrendingUp
+	} from 'lucide-svelte';
 	import { Box } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	type dashboard_interface = {
 		this_day_revenue: {
-			0: { revenue: number | null};
+			0: { revenue: number | null };
 		};
 		this_month_revenue: {
 			0: { revenue: number | null };
 		};
 		overall_statistics: {
 			0: {
-				revenue: number | null ;
+				revenue: number | null;
 				items_sold: number | null;
 			};
 		};
@@ -39,14 +46,18 @@
 			};
 			formattedTime: string;
 		}[];
+		total_inventory_cost: {
+			0: { total_cost: number | null };
+		};
 	};
+
 	export let data: { data: dashboard_interface };
 	onMount(() => {});
 </script>
 
 <div class="flex w-full flex-col border-2 p-4">
 	<h1 class="ml-4 text-4xl font-bold">Dashboard</h1>
-	<div class="my-4 ml-4 grid grid-cols-4 gap-4">
+	<div class="my-4 ml-4 flex flex-row gap-4 max-lg:text-sm">
 		<Card.Root class="w-full">
 			<Card.Header>
 				<div class="flex flex-row items-center justify-between">
@@ -61,7 +72,7 @@
 		<Card.Root class="w-full">
 			<Card.Header>
 				<div class="flex flex-row items-center justify-between">
-					<Card.Title>This Month's Revenue</Card.Title>
+					<Card.Title>Month Revenue</Card.Title>
 					<CircleDollarSign />
 				</div>
 			</Card.Header>
@@ -72,12 +83,23 @@
 		<Card.Root class="w-full">
 			<Card.Header>
 				<div class="flex flex-row items-center justify-between">
-					<Card.Title>Number of Items Sold</Card.Title>
+					<Card.Title>No. of Items Sold</Card.Title>
 					<Box />
 				</div>
 			</Card.Header>
 			<Card.Content class="text-2xl font-bold">
 				<p>{data.data.overall_statistics[0].items_sold || 0}</p>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root class="w-full">
+			<Card.Header>
+				<div class="flex flex-row items-center justify-between">
+					<Card.Title>Total Inventory Cost</Card.Title>
+					<CircleDollarSign />
+				</div>
+			</Card.Header>
+			<Card.Content class="text-2xl font-bold">
+				<p>PHP {data.data.total_inventory_cost[0].total_cost?.toFixed(2) || 0}</p>
 			</Card.Content>
 		</Card.Root>
 		<Card.Root class="w-full">
@@ -99,7 +121,10 @@
 				<Card.Root class="w-full border-none">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
-							<Card.Title class="text-green-600 dark:text-green-500">Top selling items</Card.Title>
+							<Card.Title
+								class="flex flex-row items-center gap-4 text-xl font-bold text-green-600 dark:text-green-500"
+								>Top selling items <TrendingUp /></Card.Title
+							>
 						</div>
 					</Card.Header>
 					<Card.Content class="text-2xl font-bold">
@@ -127,7 +152,10 @@
 				<Card.Root class="w-full border-none">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
-							<Card.Title class="text-red-500">Lowest selling items</Card.Title>
+							<Card.Title
+								class="flex flex-row items-center gap-4 text-xl font-bold text-red-600 dark:text-red-500"
+								>Lowest selling items <TrendingDown /></Card.Title
+							>
 						</div>
 					</Card.Header>
 					<Card.Content class="text-2xl font-bold">
@@ -159,7 +187,10 @@
 				<Card.Root class="w-full border-none">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
-							<Card.Title class="text-red-500">Low stock items</Card.Title>
+							<Card.Title
+								class="flex flex-row items-center gap-4 text-xl font-bold text-red-600 dark:text-red-500"
+								>Low stock items <Package /></Card.Title
+							>
 						</div>
 					</Card.Header>
 					<Card.Content class="text-2xl font-bold">
@@ -177,7 +208,7 @@
 									<Table.Row>
 										<Table.Cell class="font-medium">{i + 1}</Table.Cell>
 										<Table.Cell>{low.item_name}</Table.Cell>
-										<Table.Cell class="text-right">{low.total_stock}</Table.Cell>
+										<Table.Cell class="text-right text-red-500">{low.total_stock}</Table.Cell>
 									</Table.Row>
 								{/each}
 							</Table.Body>
@@ -191,7 +222,9 @@
 			<Card.Root class="min-h-[50vh] w-full border-none">
 				<Card.Header>
 					<div class="flex flex-row items-center justify-between">
-						<Card.Title class="text-blue-500">10 Recent System Events</Card.Title>
+						<Card.Title class="flex flex-row items-center gap-4 text-xl font-bold text-blue-500"
+							>10 Recent System Events <NotepadText /></Card.Title
+						>
 					</div>
 				</Card.Header>
 				<Card.Content class="text-2xl font-bold">
