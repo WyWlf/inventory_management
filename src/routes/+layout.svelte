@@ -44,10 +44,21 @@
 
 		requestAnimationFrame(updateProgress);
 	}
-
+	let documentWidth: number;
+	let iconSize = 20
 	onMount(() => {
 		windowInit = true;
+		documentWidth = document.documentElement.clientWidth;
+		window.addEventListener('resize', function () {
+			documentWidth = document.documentElement.clientWidth;
+		});
 	});
+
+	$: if (documentWidth <= 1100) {
+		iconSize = 25
+	} else {
+		iconSize = 20
+	}
 
 	$: if (activeUrl) {
 		if (windowInit) {
@@ -116,9 +127,11 @@
 						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
 						: 'flex flex-row items-center justify-center gap-2'}
 				>
-					<LayoutDashboard size="20" />
-					Dashboard</Button
-				>
+					<LayoutDashboard size={iconSize} />
+					{#if documentWidth >= 1100}
+						Dashboard
+					{/if}
+				</Button>
 				<Button
 					variant="outline"
 					href="/inventory"
@@ -126,9 +139,11 @@
 						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
 						: 'flex flex-row items-center justify-center gap-2'}
 				>
-					<Boxes size="20" />
-					Inventory Management</Button
-				>
+					<Boxes size={iconSize} />
+					{#if documentWidth >= 1100}
+						Inventory Management
+					{/if}
+				</Button>
 				<Button
 					variant="outline"
 					href="/staff_management"
@@ -136,8 +151,10 @@
 						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
 						: 'flex flex-row items-center justify-center gap-2'}
 				>
-					<Users size="20" />
-					Staff Management</Button
+					<Users size={iconSize} />
+					{#if documentWidth >= 1100}
+						Staff Management
+					{/if}</Button
 				>
 				<Button
 					variant="outline"
@@ -146,8 +163,10 @@
 						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
 						: 'flex flex-row items-center justify-center gap-2'}
 				>
-					<HandCoins size="20" />
-					Sales History</Button
+					<HandCoins size={iconSize} />
+					{#if documentWidth >= 1100}
+						Sales History
+					{/if}</Button
 				>
 				<Button
 					variant="outline"
@@ -156,8 +175,10 @@
 						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
 						: 'flex flex-row items-center justify-center gap-2'}
 				>
-					<NotepadText size="20" />
-					Logs</Button
+					<NotepadText size={iconSize} />
+					{#if documentWidth >= 1100}
+						Logs
+					{/if}</Button
 				>
 				<Button
 					variant="outline"
@@ -166,8 +187,10 @@
 						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
 						: 'flex flex-row items-center justify-center gap-2'}
 				>
-					<User size="20" />
-					My Account</Button
+					<User size={iconSize} />
+					{#if documentWidth >= 1100}
+						My Account
+					{/if}</Button
 				>
 				<Button
 					variant="outline"
@@ -175,8 +198,10 @@
 					href="/logout"
 					data-sveltekit-preload-data="tap"
 				>
-					<DoorOpen size="20" />
-					Logout</Button
+					<DoorOpen size={iconSize} />
+					{#if documentWidth >= 1100}
+						Logout
+					{/if}</Button
 				>
 			</div>
 			<ModeWatcher />

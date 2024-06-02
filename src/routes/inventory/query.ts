@@ -1,12 +1,14 @@
-export async function add_product(product_name: string, description: string, product_type: string, unit_cost: number, unit_price: number) {
+export async function add_product(brand: string, product_name: string, description: string, product_type: string, unit_cost: number, unit_price: number, images: string) {
     const res = await fetch('/api/add_product', {
         method: 'POST',
         body: JSON.stringify({
+            brand,
             product_name,
             description,
             product_type,
             unit_cost,
-            unit_price
+            unit_price,
+            images
         }),
         headers: {
             'Content-Type': 'application/json'
@@ -30,16 +32,18 @@ export async function get_products(search: string) {
     return response
 }
 
-export async function update_product(id: number, item_name: string, description: string, product_type: string, unit_cost: number, unit_price: number) {
+export async function update_product(brand: string, id: number, item_name: string, description: string, product_type: string, unit_cost: number, unit_price: number, images: string) {
     const res = await fetch('/api/update_product', {
         method: 'POST',
         body: JSON.stringify({
+            brand,
             id,
             item_name,
             description,
             product_type,
             unit_cost,
-            unit_price
+            unit_price,
+            images
         }),
         headers: {
             'Content-Type': 'application/json'

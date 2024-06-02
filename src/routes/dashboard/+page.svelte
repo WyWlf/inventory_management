@@ -1,10 +1,9 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import type { inventory_cost, inventory_history } from '$lib/schema';
 	import {
 		CircleDollarSign,
-		Flame,
+		LayoutDashboard,
 		NotepadText,
 		Package,
 		TrendingDown,
@@ -15,6 +14,12 @@
 
 	type dashboard_interface = {
 		this_day_revenue: {
+			0: { revenue: number | null };
+		};
+		yesterday_revenue: {
+			0: { revenue: number | null };
+		};
+		last_month_revenue: {
 			0: { revenue: number | null };
 		};
 		this_month_revenue: {
@@ -49,71 +54,159 @@
 		total_inventory_cost: {
 			0: { total_cost: number | null };
 		};
+		total_profit: {
+			0: { total_profit: number | null };
+		};
 	};
 
+	let day_revenue_growth = 0;
+	let month_revenue_growth = 0;
 	export let data: { data: dashboard_interface };
-	onMount(() => {});
+
+	function calculate_growth(new_value: number, old_value: number) {
+		if (old_value == null || old_value == 0) return 0;
+		return ((new_value - old_value) / old_value) * 100;
+	}
+	onMount(() => {
+		if (data.data.yesterday_revenue[0].revenue! > 0) {
+			day_revenue_growth = calculate_growth(
+				data.data.this_day_revenue[0].revenue!,
+				data.data.yesterday_revenue[0].revenue!
+			);
+		}
+
+		if (data.data.last_month_revenue[0].revenue! > 0) {
+			month_revenue_growth = calculate_growth(
+				data.data.this_month_revenue[0].revenue!,
+				data.data.last_month_revenue[0].revenue!
+			);
+		}
+		console.log(day_revenue_growth, month_revenue_growth);
+	});
 </script>
 
 <div class="flex w-full flex-col border-2 p-4">
-	<h1 class="ml-4 text-4xl font-bold">Dashboard</h1>
-	<div class="my-4 ml-4 flex flex-row gap-4 max-lg:text-sm">
-		<Card.Root class="w-full">
-			<Card.Header>
-				<div class="flex flex-row items-center justify-between">
-					<Card.Title>Today's Revenue</Card.Title>
-					<CircleDollarSign />
-				</div>
-			</Card.Header>
-			<Card.Content class="text-2xl font-bold">
-				<p>PHP {data.data.this_day_revenue[0].revenue?.toFixed(2) || 0}</p>
-			</Card.Content>
-		</Card.Root>
-		<Card.Root class="w-full">
-			<Card.Header>
-				<div class="flex flex-row items-center justify-between">
-					<Card.Title>Month Revenue</Card.Title>
-					<CircleDollarSign />
-				</div>
-			</Card.Header>
-			<Card.Content class="text-2xl font-bold">
-				<p>PHP {data.data.this_month_revenue[0].revenue?.toFixed(2) || 0}</p>
-			</Card.Content>
-		</Card.Root>
-		<Card.Root class="w-full">
-			<Card.Header>
-				<div class="flex flex-row items-center justify-between">
-					<Card.Title>No. of Items Sold</Card.Title>
-					<Box />
-				</div>
-			</Card.Header>
-			<Card.Content class="text-2xl font-bold">
-				<p>{data.data.overall_statistics[0].items_sold || 0}</p>
-			</Card.Content>
-		</Card.Root>
-		<Card.Root class="w-full">
-			<Card.Header>
-				<div class="flex flex-row items-center justify-between">
-					<Card.Title>Total Inventory Cost</Card.Title>
-					<CircleDollarSign />
-				</div>
-			</Card.Header>
-			<Card.Content class="text-2xl font-bold">
-				<p>PHP {data.data.total_inventory_cost[0].total_cost?.toFixed(2) || 0}</p>
-			</Card.Content>
-		</Card.Root>
-		<Card.Root class="w-full">
-			<Card.Header>
-				<div class="flex flex-row items-center justify-between">
-					<Card.Title>Total Revenue</Card.Title>
-					<CircleDollarSign />
-				</div>
-			</Card.Header>
-			<Card.Content class="text-2xl font-bold">
-				<p>PHP {data.data.overall_statistics[0].revenue?.toFixed(2) || 0}</p>
-			</Card.Content>
-		</Card.Root>
+	<h1 class="ml-4 flex flex-row items-center gap-2 text-4xl font-bold">
+		<LayoutDashboard size="45" />Dashboard
+	</h1>
+	<div class="my-8 ml-4 flex flex-row gap-4 max-lg:text-sm">
+		<div class="flex w-full flex-col gap-2 max-lg:flex-col">
+			<!---------------today revenue Card-------------->
+			<Card.Root class="h-[50%] w-full">
+				<Card.Header>
+					<div class="flex flex-row items-center justify-between">
+						<Card.Title>Today's Revenue</Card.Title>
+						<CircleDollarSign />
+					</div>
+				</Card.Header>
+				<Card.Content
+					class="flex h-[80%] flex-col items-center justify-between gap-4 text-2xl font-bold max-lg:mt-12 max-lg:h-[70%]"
+				>
+					{#if day_revenue_growth >= 0}
+						<img src="up.svg" alt="" srcset="" />
+					{:else}
+						<img src="down.svg" alt="" srcset="" />
+					{/if}
+					<div class="flex flex-col self-start">
+						<p class="text-4xl">
+							PHP {data.data.this_day_revenue[0].revenue?.toFixed(2) || 0}
+						</p>
+						<p class="text-lg font-normal opacity-70">
+							{day_revenue_growth.toFixed(2)}% growth over yesterday
+						</p>
+					</div>
+				</Card.Content>
+			</Card.Root>
+			<!---------------month revenue Card-------------->
+			<Card.Root class="h-[50%] w-full">
+				<Card.Header>
+					<div class="flex flex-row items-center justify-between">
+						<Card.Title>Month Revenue</Card.Title>
+						<CircleDollarSign />
+					</div>
+				</Card.Header>
+				<Card.Content
+					class="flex h-[80%] flex-col items-center justify-between gap-4 text-2xl font-bold max-lg:mt-12 max-lg:h-[70%]"
+				>
+					{#if month_revenue_growth >= 0}
+						<img src="up.svg" alt="" srcset="" />
+					{:else}
+						<img src="down.svg" alt="" srcset="" />
+					{/if}
+					<div class="flex flex-col self-start">
+						<p class="text-4xl">PHP {data.data.this_month_revenue[0].revenue?.toFixed(2) || 0}</p>
+						<p class="text-lg font-normal opacity-70">{month_revenue_growth}% growth over last month</p>
+					</div>
+				</Card.Content>
+			</Card.Root>
+		</div>
+		<div class="flex w-full flex-col gap-2">
+			<div class="flex w-full flex-1 flex-row gap-2 max-lg:flex-col">
+				<!---------------total inventory Card-------------->
+				<Card.Root class="w-full">
+					<Card.Header>
+						<div class="flex flex-row items-center justify-between">
+							<Card.Title>Total Inventory Cost</Card.Title>
+							<CircleDollarSign />
+						</div>
+					</Card.Header>
+					<Card.Content class="mt-12 flex items-center justify-center text-2xl font-bold">
+						<p>PHP {data.data.total_inventory_cost[0].total_cost?.toFixed(2) || 0}</p>
+					</Card.Content>
+				</Card.Root>
+				<!---------------Item sold Card-------------->
+				<Card.Root class="w-full">
+					<Card.Header>
+						<div class="flex flex-row items-center justify-between">
+							<Card.Title>No. of Items Sold</Card.Title>
+							<Box />
+						</div>
+					</Card.Header>
+					<Card.Content class="mt-12 flex items-center justify-center text-2xl font-bold">
+						<p>{data.data.overall_statistics[0].items_sold || 0}</p>
+					</Card.Content>
+				</Card.Root>
+			</div>
+
+			<div class="flex w-full flex-1 flex-row gap-2 max-lg:flex-col">
+				<!---------------Revenue Card-------------->
+				<Card.Root class="w-full">
+					<Card.Header>
+						<div class="flex flex-row items-center justify-between">
+							<Card.Title>Total Revenue</Card.Title>
+							<CircleDollarSign />
+						</div>
+					</Card.Header>
+					<Card.Content
+						class="mt-12 flex flex-col items-center justify-center text-center text-2xl font-bold"
+					>
+						<p>PHP {data.data.overall_statistics[0].revenue?.toFixed(2) || 0}</p>
+						<p class="text-sm font-normal opacity-70">
+							Money generated by the sale of goods and services
+						</p>
+					</Card.Content>
+				</Card.Root>
+				<!---------------Profit Card-------------->
+				<Card.Root class="w-full">
+					<Card.Header>
+						<div class="flex flex-row items-center justify-between">
+							<Card.Title>Total Profit</Card.Title>
+							<CircleDollarSign />
+						</div>
+					</Card.Header>
+					<Card.Content
+						class="mt-12 flex flex-col items-center justify-center text-center text-2xl font-bold"
+					>
+						<p>PHP {data.data.total_profit[0].total_profit?.toFixed(2) || 0}</p>
+						<p class="text-sm font-normal opacity-70">
+							Money generated after deducting business cost from the revenue
+						</p>
+					</Card.Content>
+				</Card.Root>
+			</div>
+		</div>
 	</div>
+	<!---------------Metric sub menu-------------->
 	<div class="ml-4 flex flex-col border-2">
 		<h1 class="p-4 text-2xl font-bold">Metrics</h1>
 		<div class="flex flex-row max-xl:flex-wrap">

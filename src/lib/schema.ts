@@ -2,12 +2,14 @@ import { int, text, mysqlSchema, date } from "drizzle-orm/mysql-core";
 export const mySchema = mysqlSchema("inventory_management")
 export const product_table = mySchema.table("products", {
     id: int("id").primaryKey().autoincrement(),
+    product_brand: text("product_brand"),
     item_name: text("item_name"),
     description: text("description"),
     product_type: text("product_type"),
     unit_cost: int("unit_cost"),
     unit_price: int("unit_price"),
-    stock: int("stock")
+    stock: int("stock"),
+    images: text("images")
 });
 
 export const user_table = mySchema.table("users", {
@@ -37,6 +39,7 @@ export const inventory_history = mySchema.table("inventory_history", {
 });
 
 export const inventory_cost = mySchema.table("inventory_cost", {
-    total_cost: int("total_cost")
+    total_cost: int("total_cost"),
+    total_profit: int("total_profit")
 });
 

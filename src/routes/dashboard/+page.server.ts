@@ -9,16 +9,26 @@ export const load = (async () => {
             revenue: sql<number>`SUM(${sales_history.total_cost})`
         }).from(sales_history).where(sql`date(${sales_history.time}) = CURRENT_DATE()`)
 
+        const yesterday_revenue: any = await db.select({
+            revenue: sql<number>`SUM(${sales_history.total_cost})`
+        }).from(sales_history).where(sql`date(${sales_history.time}) = CURRENT_DATE() - INTERVAL 1 DAY`)
+
+        const last_month_revenue: any = await db.select({
+            revenue: sql<number>`SUM(${sales_history.total_cost})`
+        }).from(sales_history).where(sql`date(${sales_history.time}) >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) AND DATE(${sales_history.time}) < CURRENT_DATE() - INTERVAL DAY(CURRENT_DATE())-1 DAY`)
+
         const this_month_revenue: any = await db.select({
             revenue: sql<number>`SUM(${sales_history.total_cost})`
-        }).from(sales_history).where(sql`date(MONTH(${sales_history.time})) = MONTH(CURRENT_DATE)`)
+        }).from(sales_history).where(sql`DATE(time) >= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND DATE(time) < DATE_FORMAT(CURDATE() + INTERVAL 1 MONTH, '%Y-%m-01')`)
 
         const overall_statistics: any = await db.select({
             revenue: sql<number>`SUM(${sales_history.total_cost})`,
             items_sold: sql<number>`SUM(${sales_history.units})`,
         }).from(sales_history)
 
-        const total_inventory_cost: any = await db.select().from(inventory_cost)
+        const total_inventory_cost: any = await db.select({ total_cost: inventory_cost.total_cost }).from(inventory_cost)
+
+        const total_profit: any = await db.select({ total_profit: inventory_cost.total_profit }).from(inventory_cost)
 
         const top_selling_metric: any = await db.select({
             item_name: sales_history.item_name,
@@ -42,13 +52,16 @@ export const load = (async () => {
 
         return {
             this_day_revenue,
+            yesterday_revenue,
+            last_month_revenue,
             this_month_revenue,
             overall_statistics,
             top_selling_metric,
             low_selling_metric,
             low_stock_metric,
-            events,
-            total_inventory_cost
+            total_inventory_cost,
+            total_profit,
+            events
         }
     }
     return {

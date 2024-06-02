@@ -6,13 +6,14 @@ import { eq } from 'drizzle-orm'
 export async function POST({ request, cookies }) {
     try {
         const {
+            brand,
             id,
             item_name,
             description,
             product_type,
             unit_cost,
-            unit_price } = await request.json()
-        const [query]: any = await db.update(product_table).set({ item_name: item_name, description: description, product_type: product_type, unit_cost: unit_cost, unit_price: unit_price }).where(eq(product_table.id, id)).execute()
+            unit_price, images } = await request.json()
+        const [query]: any = await db.update(product_table).set({ product_brand: brand, item_name: item_name, description: description, product_type: product_type, unit_cost: unit_cost, unit_price: unit_price, images: JSON.stringify(images) }).where(eq(product_table.id, id)).execute()
 
         if (query['affectedRows'] > 0) {
             logger(cookies.get('username'), cookies.get('username') + ' has updated the product information of ' + item_name)

@@ -4,7 +4,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { UserPlus } from 'lucide-svelte';
+	import { UserPlus, Users } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
 	import * as Pagination from '$lib/components/ui/pagination';
@@ -161,7 +161,9 @@
 </script>
 
 <div class="flex w-full flex-col border-2 p-4">
-	<h1 class="ml-4 text-4xl font-bold">Staff Management</h1>
+	<h1 class="ml-4 flex flex-row items-center gap-2 text-4xl font-bold">
+		<Users size="45" />Staff Management
+	</h1>
 	<div class="my-8 ml-4 flex flex-row items-center gap-24">
 		<div class="flex flex-row items-center gap-4">
 			<div class="flex flex-row items-center">

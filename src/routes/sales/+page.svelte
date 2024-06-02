@@ -7,7 +7,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { CalendarDays, Filter, X } from 'lucide-svelte';
+	import { CalendarDays, Filter, HandCoins, X } from 'lucide-svelte';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
@@ -131,7 +131,7 @@
 </script>
 
 <div class="flex w-full flex-col border-2 p-4">
-	<h1 class="ml-4 text-4xl font-bold">Sales History</h1>
+	<h1 class="ml-4 text-4xl font-bold flex flex-row items-center gap-2"><HandCoins size="45" />Sales History</h1>
 	<div class="my-8 ml-4 flex flex-row items-center gap-24">
 		<div class="flex flex-row items-center">
 			<Label for="email">Search</Label>
@@ -308,7 +308,7 @@
 					<Table.Cell class="text-center"></Table.Cell>
 					<Table.Cell class="text-center"></Table.Cell>
 					<Table.Cell class="float-right flex flex-row items-center gap-4 text-right font-bold"
-						>Total Profit</Table.Cell
+						>Total Revenue</Table.Cell
 					>
 					<Table.Cell class="text-right font-bold">PHP {total_cost.toFixed(2)}</Table.Cell>
 				</Table.Row>
