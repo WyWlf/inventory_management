@@ -491,7 +491,7 @@
 			<div class="flex flex-row items-center justify-between gap-4">
 				<Label for="files">Images:</Label>
 				<div class="flex flex-row items-center gap-4">
-					<input id="files" bind:files type="file" multiple accept="image/png" />
+					<input id="files" bind:files type="file" multiple accept="image/png, image/jpeg" />
 				</div>
 			</div>
 		</div>
@@ -612,7 +612,7 @@
 			<div class="flex flex-row items-center justify-between gap-4">
 				<Label for="files">Images:</Label>
 				<div class="flex flex-row items-center gap-4">
-					<input id="files" bind:files type="file" multiple accept="image/png" />
+					<input id="files" bind:files type="file" multiple accept="image/png, image/jpeg" />
 				</div>
 			</div>
 		</div>
@@ -825,7 +825,7 @@
 							<div class="p-1">
 								<Card.Root>
 									<Card.Content class="flex aspect-square items-center justify-center p-6">
-										<img src="data:image/jpeg;base64,{image.encoded}" alt="" srcset="" />
+										<img src="data:image/png;base64,{image.encoded}" alt="" srcset="" />
 									</Card.Content>
 								</Card.Root>
 							</div>
