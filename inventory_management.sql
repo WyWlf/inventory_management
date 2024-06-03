@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2024 at 09:08 AM
+-- Generation Time: Jun 03, 2024 at 02:27 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -24,6 +24,24 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `inventory_cost`
+--
+
+CREATE TABLE `inventory_cost` (
+  `total_cost` double NOT NULL DEFAULT 0,
+  `total_profit` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `inventory_cost`
+--
+
+INSERT INTO `inventory_cost` (`total_cost`, `total_profit`) VALUES
+(0, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `inventory_history`
 --
 
@@ -34,18 +52,6 @@ CREATE TABLE `inventory_history` (
   `time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `inventory_history`
---
-
-INSERT INTO `inventory_history` (`id`, `username`, `action`, `time`) VALUES
-(73, 'admin', 'admin has logged out of the system', '2024-05-28 14:53:04'),
-(74, 'admin', 'admin has logged in to the system', '2024-05-28 14:53:10'),
-(75, 'admin', 'admin has updated their own account information', '2024-05-28 14:53:29'),
-(76, 'admin', 'admin has logged out of the system', '2024-05-28 14:56:50'),
-(77, 'admin', 'admin has logged in to the system', '2024-05-28 15:00:05'),
-(78, 'admin', 'admin has updated their own account information', '2024-05-28 15:03:16');
-
 -- --------------------------------------------------------
 
 --
@@ -54,12 +60,14 @@ INSERT INTO `inventory_history` (`id`, `username`, `action`, `time`) VALUES
 
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
+  `product_brand` text NOT NULL,
   `item_name` text NOT NULL,
   `description` text NOT NULL,
   `product_type` text NOT NULL,
   `unit_cost` double NOT NULL,
   `unit_price` double NOT NULL,
-  `stock` int(11) NOT NULL
+  `stock` int(11) NOT NULL,
+  `images` longtext NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -98,7 +106,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `full_name`, `address`, `phone_number`, `password`) VALUES
-(8, 'admin', 'admin account', '', '', '$2b$10$/HDjM8/7Qy5HNBx7A7Ey4Oy37/B/tyfGmpRECilDvbX2b3hxn4Kn2');
+(8, 'admin', 'admin', ' ', '', '$2b$10$/HDjM8/7Qy5HNBx7A7Ey4Oy37/B/tyfGmpRECilDvbX2b3hxn4Kn2');
 
 --
 -- Indexes for dumped tables
@@ -136,19 +144,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `inventory_history`
 --
 ALTER TABLE `inventory_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `sales_history`
 --
 ALTER TABLE `sales_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `users`
