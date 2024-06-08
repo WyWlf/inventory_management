@@ -160,7 +160,7 @@
 	});
 </script>
 
-<div class="flex w-full flex-col border-2 p-4">
+<div class="flex w-full flex-col border-2 p-4 bg-slate-100 dark:bg-transparent">
 	<h1 class="ml-4 flex flex-row items-center gap-2 text-4xl font-bold">
 		<Users size="45" />Staff Management
 	</h1>
@@ -237,6 +237,7 @@
 			</Table.Caption>
 			<Table.Header>
 				<Table.Row>
+					<Table.Head>ID</Table.Head>
 					<Table.Head>Username</Table.Head>
 					<Table.Head>Full Name</Table.Head>
 					<Table.Head>Address</Table.Head>
@@ -246,8 +247,9 @@
 			</Table.Header>
 			<Table.Body>
 				{#key user_list}
-					{#each user_list as user}
+					{#each user_list as user, i}
 						<Table.Row>
+							<Table.Cell class="font-semibold">{i+1}</Table.Cell>
 							<Table.Cell>{user.username}</Table.Cell>
 							<Table.Cell>{user.full_name || 'No information provided'}</Table.Cell>
 							<Table.Cell>{user.address || 'No information provided'}</Table.Cell>

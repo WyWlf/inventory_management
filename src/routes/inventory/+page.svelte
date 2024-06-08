@@ -273,7 +273,7 @@
 	});
 </script>
 
-<div class="flex w-full flex-col border-2 p-4">
+<div class="flex w-full flex-col border-2 p-4 bg-slate-100 dark:bg-transparent">
 	<h1 class="ml-4 flex flex-row items-center gap-2 text-4xl font-bold">
 		<Boxes size="45" />Inventory Management
 	</h1>
@@ -679,7 +679,7 @@
 				</div>
 			</div>
 			<div class="flex flex-row items-center justify-between gap-4">
-				<Label for="price">Unit Price:</Label>
+				<Label for="price">Quantity:</Label>
 				<div class="flex flex-row items-center gap-4">
 					<span>Qty.</span>
 					<Input
@@ -787,7 +787,7 @@
 							<Label for="name" class="min-w-max">Unit Price:</Label>
 							<div class="flex flex-row items-center justify-between gap-2">
 								<span class="font-bold">PHP</span>
-								<Input value={stock_product_form.unit_price} class="pointer-events-none" />
+								<Input value={stock_product_form.unit_price} class="pointer-events-none" tabindex={-1} />
 							</div>
 						</div>
 
@@ -841,6 +841,19 @@
 							</div>
 						</div>
 						<div class="flex flex-row items-center justify-between gap-4">
+							<Label for="name" class="min-w-max">Price discount:</Label>
+							<div class="flex flex-row items-center justify-between gap-2">
+								<span class="font-bold">PHP</span>
+								<Input
+									value={(stock_product_form.unit_price * stock_count) - stock_product_form.total_price}
+									type="number"
+									class="pointer-events-none"
+									tabindex={-1}
+								/>
+							</div>
+						</div>
+						<hr>
+						<div class="flex flex-row items-center justify-between gap-4">
 							<Label for="name" class="min-w-max">Total Price:</Label>
 							<div class="flex flex-row items-center justify-between gap-2">
 								<span class="font-bold">PHP</span>
@@ -848,6 +861,7 @@
 									bind:value={stock_product_form.total_price}
 									type="number"
 									class="pointer-events-none"
+									tabindex={-1}
 								/>
 							</div>
 						</div>

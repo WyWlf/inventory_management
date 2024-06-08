@@ -92,7 +92,7 @@
 	<div class="my-8 ml-4 flex flex-row gap-4 max-lg:text-sm">
 		<div class="flex w-full flex-col gap-2 max-lg:flex-col">
 			<!---------------today revenue Card-------------->
-			<Card.Root class="h-[50%] w-full">
+			<Card.Root class="h-[50%] w-full bg-slate-100 dark:bg-transparent">
 				<Card.Header>
 					<div class="flex flex-row items-center justify-between">
 						<Card.Title>Today's Revenue</Card.Title>
@@ -118,7 +118,7 @@
 				</Card.Content>
 			</Card.Root>
 			<!---------------month revenue Card-------------->
-			<Card.Root class="h-[50%] w-full">
+			<Card.Root class="h-[50%] w-full bg-slate-100 dark:bg-transparent">
 				<Card.Header>
 					<div class="flex flex-row items-center justify-between">
 						<Card.Title>Month Revenue</Card.Title>
@@ -135,7 +135,9 @@
 					{/if}
 					<div class="flex flex-col self-start">
 						<p class="text-4xl">PHP {data.data.this_month_revenue[0].revenue?.toFixed(2) || 0}</p>
-						<p class="text-lg font-normal opacity-70">{month_revenue_growth}% growth over last month</p>
+						<p class="text-lg font-normal opacity-70">
+							{month_revenue_growth}% growth over last month
+						</p>
 					</div>
 				</Card.Content>
 			</Card.Root>
@@ -143,7 +145,7 @@
 		<div class="flex w-full flex-col gap-2">
 			<div class="flex w-full flex-1 flex-row gap-2 max-lg:flex-col">
 				<!---------------total inventory Card-------------->
-				<Card.Root class="w-full">
+				<Card.Root class="w-full bg-slate-100 dark:bg-transparent">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
 							<Card.Title>Total Inventory Cost</Card.Title>
@@ -155,7 +157,7 @@
 					</Card.Content>
 				</Card.Root>
 				<!---------------Item sold Card-------------->
-				<Card.Root class="w-full">
+				<Card.Root class="w-full bg-slate-100 dark:bg-transparent">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
 							<Card.Title>No. of Items Sold</Card.Title>
@@ -170,7 +172,7 @@
 
 			<div class="flex w-full flex-1 flex-row gap-2 max-lg:flex-col">
 				<!---------------Revenue Card-------------->
-				<Card.Root class="w-full">
+				<Card.Root class="w-full bg-slate-100 dark:bg-transparent">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
 							<Card.Title>Total Revenue</Card.Title>
@@ -207,22 +209,22 @@
 		</div>
 	</div>
 	<!---------------Metric sub menu-------------->
-	<div class="ml-4 flex flex-col border-2">
+	<div class="ml-4 flex flex-col rounded-2xl border-2 bg-slate-300 dark:bg-transparent">
 		<h1 class="p-4 text-2xl font-bold">Metrics</h1>
 		<div class="flex flex-row max-xl:flex-wrap">
 			<div class="m-4 flex w-full flex-row gap-4">
-				<Card.Root class="w-full border-none">
+				<Card.Root class="w-full border-none ">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
 							<Card.Title
 								class="flex flex-row items-center gap-4 text-xl font-bold text-green-600 dark:text-green-500"
-								>Top selling items <TrendingUp /></Card.Title
+								>Top selling items<TrendingUp /></Card.Title
 							>
 						</div>
 					</Card.Header>
 					<Card.Content class="text-2xl font-bold">
 						<Table.Root>
-							<Table.Caption>A list of your recent top selling items.</Table.Caption>
+							<Table.Caption>A list of your top selling items.</Table.Caption>
 							<Table.Header>
 								<Table.Row>
 									<Table.Head class="w-[100px]">No</Table.Head>
@@ -247,7 +249,7 @@
 						<div class="flex flex-row items-center justify-between">
 							<Card.Title
 								class="flex flex-row items-center gap-4 text-xl font-bold text-red-600 dark:text-red-500"
-								>Lowest selling items <TrendingDown /></Card.Title
+								>Lowest selling items<TrendingDown /></Card.Title
 							>
 						</div>
 					</Card.Header>
@@ -282,7 +284,7 @@
 						<div class="flex flex-row items-center justify-between">
 							<Card.Title
 								class="flex flex-row items-center gap-4 text-xl font-bold text-red-600 dark:text-red-500"
-								>Low stock items <Package /></Card.Title
+								>Low stock items<Package /></Card.Title
 							>
 						</div>
 					</Card.Header>

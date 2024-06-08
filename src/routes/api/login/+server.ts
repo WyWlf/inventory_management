@@ -11,13 +11,14 @@ const compareAsync = promisify(bcrypt.compare)
 export async function POST({ request, cookies }) {
     try {
         const { username, password } = await request.json()
-        const query: any = await db.select({ password: user_table.password, id: user_table.id }).from(user_table).where(eq(user_table.username, username))
+        const query: any = await db.select({ password: user_table.password, id: user_table.id, role: user_table.role }).from(user_table).where(eq(user_table.username, username))
         if (query.length > 0) {
             const compare = await compareAsync(password, query[0].password)
             if (compare) {
                 cookies.set('username', username, { path: '/', httpOnly: false, secure: false })
                 cookies.set('id', query[0].id, { path: '/', httpOnly: false, secure: false })
                 cookies.set('token', generateToken(username), { path: '/', httpOnly: false, secure: false })
+                cookies.set('role', query[0].role, { path: '/', httpOnly: false, secure: false })
                 logger(cookies.get('username'), cookies.get('username') + ' has logged in to the system')
                 return new Response(JSON.stringify({
                     status: 200,

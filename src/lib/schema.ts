@@ -19,6 +19,7 @@ export const user_table = mySchema.table("users", {
     address: text("address"),
     phone_number: text("phone_number"),
     password: text("password"),
+    role: int("role")
 });
 
 export const sales_history = mySchema.table("sales_history", {

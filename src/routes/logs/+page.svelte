@@ -110,7 +110,7 @@
 	}
 </script>
 
-<div class="flex w-full flex-col border-2 p-4">
+<div class="flex w-full flex-col border-2 p-4 bg-slate-100 dark:bg-transparent">
 	<h1 class="ml-4 text-4xl font-bold flex flex-row items-center gap-2"><NotepadText size="45" />Log History</h1>
 	<div class="my-8 ml-4 flex flex-row items-center gap-24">
 		<div class="flex flex-row items-center">

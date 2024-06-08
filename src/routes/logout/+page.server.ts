@@ -9,5 +9,6 @@ export const load = (async ({ cookies }) => {
     cookies.delete('id', { path: '/' })
     cookies.delete('token', { path: '/' })
     cookies.delete('username', { path: '/' })
+    cookies.delete('role', { path: '/' })
     redirect(308, '/')
 }) satisfies PageServerLoad;

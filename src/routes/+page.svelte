@@ -35,13 +35,13 @@
 	});
 </script>
 
-<div class="flex min-h-[100vh] w-full items-center justify-center dark:bg-slate-600">
+<div class="flex min-h-[100vh] w-full items-center justify-center dark:bg-slate-600" class:bgImage={true}>
 	<div
 		class="m-4 flex min-h-[70vh] min-w-[20vw] flex-col items-center rounded-2xl border-2 bg-stone-50 max-xl:min-w-[50vw]"
 	>
 		<CircleUser size="64" class="mt-16 dark:fill-black" />
 		<h1 class="mt-4 text-2xl font-bold dark:text-black">LOGIN</h1>
-		<h2 class="mb-16 text-white dark:text-black">Inventory Management System</h2>
+		<h2 class="mb-16 text-black dark:text-white">Inventory Management System</h2>
 
 		<div class="flex h-[50%] w-[80%] flex-col gap-4 border-black">
 			<Label class="dark:text-black">Username:</Label>
@@ -86,3 +86,10 @@
 </div>
 
 <Toaster />
+
+
+<style>
+	.bgImage {
+		background-image: url('bg.jfif');
+	}
+</style>

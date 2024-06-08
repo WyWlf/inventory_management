@@ -144,18 +144,20 @@
 						Inventory Management
 					{/if}
 				</Button>
-				<Button
-					variant="outline"
-					href="/staff_management"
-					class={activeUrl == '/staff_management'
-						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
-						: 'flex flex-row items-center justify-center gap-2'}
-				>
-					<Users size={iconSize} />
-					{#if documentWidth >= 1100}
-						Staff Management
-					{/if}</Button
-				>
+				{#if Cookies.get('role') == '1'}
+					<Button
+						variant="outline"
+						href="/staff_management"
+						class={activeUrl == '/staff_management'
+							? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+							: 'flex flex-row items-center justify-center gap-2'}
+					>
+						<Users size={iconSize} />
+						{#if documentWidth >= 1100}
+							Staff Management
+						{/if}</Button
+					>
+				{/if}
 				<Button
 					variant="outline"
 					href="/sales"
@@ -180,18 +182,20 @@
 						Outgoing History
 					{/if}</Button
 				>
-				<Button
-					variant="outline"
-					href="/logs"
-					class={activeUrl == '/logs'
-						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
-						: 'flex flex-row items-center justify-center gap-2'}
-				>
-					<NotepadText size={iconSize} />
-					{#if documentWidth >= 1100}
-						Logs
-					{/if}</Button
-				>
+				{#if Cookies.get('role') == '1'}
+					<Button
+						variant="outline"
+						href="/logs"
+						class={activeUrl == '/logs'
+							? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+							: 'flex flex-row items-center justify-center gap-2'}
+					>
+						<NotepadText size={iconSize} />
+						{#if documentWidth >= 1100}
+							Logs
+						{/if}</Button
+					>
+				{/if}
 				<Button
 					variant="outline"
 					href="/account"

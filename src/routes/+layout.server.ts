@@ -5,11 +5,9 @@ import { user_table } from '$lib/schema'
 import { count, eq } from 'drizzle-orm'
 import { verifyToken } from '$lib/auth'
 
-export const load = (async ({ cookies }) => {
+export const load = (async ({ cookies, url }) => {
     try {
-
         let token: any = await verifyToken(cookies.get('token')!)
-
         if (token) {
             let query: any = await db.select({ count: count() }).from(user_table).where(eq(user_table.username, token))
             if (query[0].count == 0) {

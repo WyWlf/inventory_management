@@ -126,7 +126,7 @@
 	}
 </script>
 
-<div class="flex w-full flex-col border-2 p-4">
+<div class="flex w-full flex-col border-2 p-4 bg-slate-100 dark:bg-transparent">
 	<h1 class="ml-4 flex flex-row items-center gap-2 text-4xl font-bold">
 		<NotepadText size="45" />Outgoing History
 	</h1>
