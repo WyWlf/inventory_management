@@ -45,7 +45,7 @@
 		requestAnimationFrame(updateProgress);
 	}
 	let documentWidth: number;
-	let iconSize = 20
+	let iconSize = 20;
 	onMount(() => {
 		windowInit = true;
 		documentWidth = document.documentElement.clientWidth;
@@ -55,9 +55,9 @@
 	});
 
 	$: if (documentWidth <= 1100) {
-		iconSize = 25
+		iconSize = 25;
 	} else {
-		iconSize = 20
+		iconSize = 20;
 	}
 
 	$: if (activeUrl) {
@@ -166,6 +166,18 @@
 					<HandCoins size={iconSize} />
 					{#if documentWidth >= 1100}
 						Sales History
+					{/if}</Button
+				>
+				<Button
+					variant="outline"
+					href="/outgoing"
+					class={activeUrl == '/outgoing'
+						? 'flex flex-row items-center justify-center gap-2 bg-blue-300 dark:bg-blue-700'
+						: 'flex flex-row items-center justify-center gap-2'}
+				>
+					<NotepadText size={iconSize} />
+					{#if documentWidth >= 1100}
+						Outgoing History
 					{/if}</Button
 				>
 				<Button

@@ -27,8 +27,20 @@ export const sales_history = mySchema.table("sales_history", {
     item_name: text("item_name"),
     price_unit: int("price_unit"),
     units: int("units"),
+    discount: int("discount"),
+    price_discounted: int("price_discounted"),
     total_cost: int("total_cost"),
     time: date("time"),
+});
+
+export const outgoing_history = mySchema.table("outgoing_history", {
+    id: int("id").primaryKey().autoincrement(),
+    username: text("username"),
+    reason: text("reason"),
+    product_name: text("product_name"),
+    recipient: text("recipient"),
+    qty: text("qty"),
+    time: date("time")
 });
 
 export const inventory_history = mySchema.table("inventory_history", {

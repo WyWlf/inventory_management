@@ -7,38 +7,36 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { CalendarDays, Filter, HandCoins, X } from 'lucide-svelte';
+	import { CalendarDays, Filter, HandCoins, NotepadText, X } from 'lucide-svelte';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import * as Dialog from '$lib/components/ui/dialog';
-	import { get_sales_history } from './query';
+	import { get_outgoing_history } from './query';
 	import { onMount } from 'svelte';
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
 	});
 
-	type sales_history_interface = {
+	type outgoing_history_interface = {
 		formattedTime: string;
-		sales_history: {
+		outgoing_history: {
 			id: number;
-			item_id: number;
-			item_name: string;
-			units: number;
-			discount: number;
-			price_discounted: number;
-			price_unit: number;
-			total_cost: number;
-			time: string;
+			username: string;
+			reason: string;
+			product_name: string;
+			recipient: string;
+			qty: number;
+			formattedTime: string;
 		};
 	};
 
-	export let data: { data: sales_history_interface[] };
-	const original_sales_list = data.data;
-	let sales_history_list = data.data;
-	let sales_list_len = original_sales_list.length;
-	sales_history_list = sales_history_list.slice(0, 10);
+	export let data: { data: outgoing_history_interface[] };
+	const original_outgoing_list = data.data;
+	let outgoing_history_list = data.data;
+	let outgoing_list_len = original_outgoing_list.length;
+	outgoing_history_list = outgoing_history_list.slice(0, 10);
 	let startDate: DateValue | undefined = undefined;
 	let endDate: DateValue | undefined = undefined;
 
@@ -50,34 +48,36 @@
 	let filterOpt = 'Daily';
 	let updateProductDialog = false;
 	let paginationPage = 1;
-	async function reload_sales_list() {
-		const get_list_response: [] = await get_sales_history(
+	async function reload_history_list() {
+		const get_list_response: [] = await get_outgoing_history(
 			search,
 			formatted_start_date,
 			formatted_end_date,
 			filterOpt
 		);
-		sales_list_len = get_list_response.length;
+		outgoing_list_len = get_list_response.length;
 		let list_end = 10;
 		let copy_list = get_list_response;
-		sales_history_list = copy_list.slice(0, list_end);
+		outgoing_history_list = copy_list.slice(0, list_end);
 
 		total_cost = 0;
 		total_units = 0;
-		get_list_response.forEach((data: { sales_history: { total_cost: number; units: number } }) => {
-			total_cost += data.sales_history.total_cost;
-			total_units += data.sales_history.units;
-		});
+		get_list_response.forEach(
+			(data: { outgoing_history: { total_cost: number; units: number } }) => {
+				total_cost += data.outgoing_history.total_cost;
+				total_units += data.outgoing_history.units;
+			}
+		);
 	}
 
-	async function get_sales_on_nav() {
-		const get_list_response = await get_sales_history(
+	async function get_history_on_nav() {
+		const get_list_response = await get_outgoing_history(
 			search,
 			formatted_start_date,
 			formatted_end_date,
 			filterOpt
 		);
-		sales_list_len = get_list_response.length;
+		outgoing_list_len = get_list_response.length;
 		let list_start = 0;
 		let list_end = 10;
 		let copy_list = get_list_response;
@@ -85,9 +85,9 @@
 		if (paginationPage > 1) {
 			list_start = 10 * paginationPage - 10;
 			list_end = list_start + 10;
-			sales_history_list = copy_list.slice(list_start, list_end);
+			outgoing_history_list = copy_list.slice(list_start, list_end);
 		} else {
-			sales_history_list = copy_list.slice(0, list_end);
+			outgoing_history_list = copy_list.slice(0, list_end);
 		}
 	}
 
@@ -95,7 +95,7 @@
 		formatted_start_date = pad_date_values(startDate);
 		formatted_end_date = pad_date_values(endDate);
 
-		reload_sales_list();
+		reload_history_list();
 	}
 
 	function pad_date_values(date: DateValue | undefined) {
@@ -118,13 +118,7 @@
 	}
 
 	onMount(async () => {
-		// await get_sales_on_nav();
-		original_sales_list.forEach(
-			(data: { sales_history: { total_cost: number; units: number } }) => {
-				total_cost += data.sales_history.total_cost;
-				total_units += data.sales_history.units;
-			}
-		);
+		// await get_outgoing_on_nav();
 	});
 
 	$: if (startDate || endDate) {
@@ -134,7 +128,7 @@
 
 <div class="flex w-full flex-col border-2 p-4">
 	<h1 class="ml-4 flex flex-row items-center gap-2 text-4xl font-bold">
-		<HandCoins size="45" />Sales History
+		<NotepadText size="45" />Outgoing History
 	</h1>
 	<div class="my-8 ml-4 flex flex-row items-center gap-24">
 		<div class="flex flex-row items-center">
@@ -143,7 +137,7 @@
 				class="m-2 w-min"
 				bind:value={search}
 				placeholder="search by item name"
-				on:input={reload_sales_list}
+				on:input={reload_history_list}
 			/>
 		</div>
 		<div class="flex flex-row items-center gap-4 max-xl:flex-wrap">
@@ -224,7 +218,7 @@
 					endDate = undefined;
 					formatted_start_date = '';
 					formatted_end_date = '';
-					reload_sales_list();
+					reload_history_list();
 				}}><X size="20" />Clear Date</Button
 			>
 			<!-- <Button variant="outline" class="float-right max-xl:m-0" on:click={() => {}}
@@ -236,13 +230,13 @@
 	<div class="flex max-h-[65vh] min-h-[50vh] border-2">
 		<Table.Root>
 			<Table.Caption>
-				<Pagination.Root count={sales_list_len} perPage={10} let:pages let:currentPage>
+				<Pagination.Root count={outgoing_list_len} perPage={10} let:pages let:currentPage>
 					<Pagination.Content>
 						<Pagination.Item>
 							<Pagination.PrevButton
 								on:click={async () => {
 									paginationPage = paginationPage - 1;
-									await get_sales_on_nav();
+									await get_history_on_nav();
 								}}
 							/>
 						</Pagination.Item>
@@ -258,7 +252,7 @@
 										isActive={currentPage == page.value}
 										on:click={async () => {
 											paginationPage = page.value;
-											await get_sales_on_nav();
+											await get_history_on_nav();
 										}}
 									>
 										{page.value}
@@ -271,7 +265,7 @@
 								on:click={async () => {
 									if (paginationPage < pages.length) {
 										paginationPage += 1;
-										await get_sales_on_nav();
+										await get_history_on_nav();
 									}
 								}}
 							/>
@@ -281,59 +275,29 @@
 			</Table.Caption>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head>Transaction No.</Table.Head>
-					<Table.Head>Item Name</Table.Head>
-					<Table.Head class="text-center">No. of items sold</Table.Head>
-					<Table.Head class="text-center">Date and Time</Table.Head>
-					<Table.Head class="text-center">Discount applied</Table.Head>
-					<Table.Head class="text-right">Price discount</Table.Head>
-					<Table.Head class="text-right">Price per unit</Table.Head>
-					<Table.Head class="text-right">Total</Table.Head>
+					<Table.Head>ID No.</Table.Head>
+					<Table.Head>Username</Table.Head>
+					<Table.Head class="">Product Name</Table.Head>
+					<Table.Head class="">Reason</Table.Head>
+					<Table.Head class="">Recipient</Table.Head>
+					<Table.Head class="text-center">Quantity</Table.Head>
+					<Table.Head class="text-right">Date and Time</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#key sales_history_list}
-					{#each sales_history_list as sale}
+				{#key outgoing_history_list}
+					{#each outgoing_history_list as outgoing}
 						<Table.Row>
-							<Table.Cell class="font-medium">{sale.sales_history.id}</Table.Cell>
-							<Table.Cell>{sale.sales_history.item_name}</Table.Cell>
-							<Table.Cell class="text-center">{sale.sales_history.units}</Table.Cell>
-							<Table.Cell class="text-center">{sale.formattedTime}</Table.Cell>
-							<Table.Cell class="text-center">{sale.sales_history.discount}%</Table.Cell>
-							<Table.Cell class="text-right"
-								>PHP {sale.sales_history.price_discounted.toFixed(2)}</Table.Cell
-							>
-							<Table.Cell class="text-right"
-								>PHP {sale.sales_history.price_unit.toFixed(2)}</Table.Cell
-							>
-							<Table.Cell class="text-right"
-								>PHP {sale.sales_history.total_cost.toFixed(2)}</Table.Cell
-							>
+							<Table.Cell class="font-medium">{outgoing.outgoing_history.id}</Table.Cell>
+							<Table.Cell>{outgoing.outgoing_history.username}</Table.Cell>
+							<Table.Cell class="">{outgoing.outgoing_history.product_name}</Table.Cell>
+							<Table.Cell class="">{outgoing.outgoing_history.reason}</Table.Cell>
+							<Table.Cell class="">{outgoing.outgoing_history.recipient || 'No recipient'}</Table.Cell>
+							<Table.Cell class="text-center">{outgoing.outgoing_history.qty}</Table.Cell>
+							<Table.Cell class="text-right">{outgoing.formattedTime}</Table.Cell>
 						</Table.Row>
 					{/each}
 				{/key}
-				<Table.Row class="border-none">
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell class="float-right flex flex-row items-center gap-4 text-right font-bold"
-						>Total Revenue</Table.Cell
-					>
-					<Table.Cell class="text-right font-bold">PHP {total_cost.toFixed(2)}</Table.Cell>
-				</Table.Row>
-				<Table.Row>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell></Table.Cell>
-					<Table.Cell class="text-right font-bold">Total Items Sold</Table.Cell>
-					<Table.Cell class="text-right font-bold">{total_units} units</Table.Cell>
-				</Table.Row>
 			</Table.Body>
 		</Table.Root>
 	</div>

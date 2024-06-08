@@ -27,12 +27,15 @@
 			query: product_database_interface[];
 			types: { type: string }[];
 			unique_product_name: { item_name: string }[];
+			unique_brand_name: { product_brand: string }[];
 		};
 	};
 	const original_product_list = data.data.query;
 	let original_unique_list = data.data.unique_product_name;
 
 	let current_unique_list: [] = JSON.parse(JSON.stringify(original_unique_list));
+	let current_brand_list: any[] = JSON.parse(JSON.stringify(data.data.unique_brand_name));
+
 	let product_list_len = 0;
 	let product_list = data.data.query;
 	product_list = product_list.slice(0, 10);
@@ -41,7 +44,9 @@
 	let delete_item_name = '';
 	let stock_count = 0;
 	let image_modal = false;
+	let tab_value = 'add';
 	let image_carousel_list: { id: number; encoded: string }[] = [];
+	let reason_list = ['Transfer to recipient', 'Stock removal', 'Damaged unit'];
 	type product_database_interface = {
 		id: number;
 		product_brand: string;
@@ -59,6 +64,9 @@
 		item_name: string;
 		stock: number;
 		action: string;
+		unit_price: number;
+		discount: number;
+		total_price: number;
 	};
 
 	let add_product_form: product_database_interface = {
@@ -89,7 +97,18 @@
 		id: 0,
 		item_name: '',
 		stock: 0,
-		action: ''
+		unit_price: 0,
+		discount: 0,
+		action: '',
+		total_price: 0
+	};
+
+	let outgoing_form: {
+		reason: string;
+		recipient: string;
+	} = {
+		reason: '',
+		recipient: ''
 	};
 
 	function formValid(form: any) {
@@ -156,8 +175,13 @@
 	async function reload_product_list() {
 		const get_product_response = await get_products(search);
 		product_list_len = get_product_response.data.length;
+
 		current_unique_list = get_product_response.unique_list;
 		current_unique_list = current_unique_list;
+
+		current_brand_list = get_product_response.brands;
+		current_brand_list = current_brand_list;
+
 		product_types = get_product_response.types;
 		product_types = product_types;
 
@@ -190,6 +214,19 @@
 		if (index > -1) {
 			current_unique_list.splice(index, 1);
 			current_unique_list = current_unique_list;
+		}
+	}
+
+	function calculate_receipt(discount: number) {
+		let initial_price = parseFloat((stock_product_form.unit_price * stock_count).toFixed(2));
+		let discount_percentage = 0;
+		if (discount > 0) {
+			discount_percentage = discount / 100;
+			stock_product_form.total_price = parseFloat(
+				(initial_price - initial_price * discount_percentage).toFixed(2)
+			);
+		} else if (discount === 0) {
+			stock_product_form.total_price = parseFloat(initial_price.toFixed(2));
 		}
 	}
 
@@ -390,7 +427,7 @@
 													stock_product_form.id = product.id;
 													stock_product_form.item_name = product.item_name;
 													stock_product_form.stock = product.stock;
-													stock_product_form.action = 'add';
+													stock_product_form.unit_price = product.unit_price;
 												}}>Update Stock</DropdownMenu.Item
 											>
 											<DropdownMenu.Item
@@ -421,10 +458,26 @@
 <Dialog.Root open={updateProductDialog} closeOnEscape={true}>
 	<Dialog.Content>
 		<Dialog.Title>Update Product Information</Dialog.Title>
-		<div class="grid gap-4 py-8">
-			<div class="flex flex-col gap-4">
-				<Label for="name">Product Brand:</Label>
+		<div class="grid gap-4 py-4">
+			<div class="mb-4 flex flex-row items-center gap-4">
+				<Label for="name" class="min-w-max">Product Brand:</Label>
 				<Input id="name" bind:value={update_product_form.product_brand} class="col-span-3" />
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						<Button variant="outline">Brand List</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content>
+						<DropdownMenu.Group>
+							{#each current_brand_list as brand}
+								<DropdownMenu.Item
+									on:click={() => {
+										update_product_form.product_brand = brand.product_brand;
+									}}>{brand.product_brand}</DropdownMenu.Item
+								>
+							{/each}
+						</DropdownMenu.Group>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			</div>
 			<div class="flex flex-col gap-4">
 				<Label for="name">Product Name:</Label>
@@ -541,10 +594,26 @@
 		<Dialog.Header class="pt-4">
 			<Dialog.Title>Add New Product</Dialog.Title>
 		</Dialog.Header>
-		<div class="grid gap-4 py-8">
-			<div class="flex flex-col gap-4">
-				<Label for="name">Product Brand:</Label>
+		<div class="grid gap-4 py-4">
+			<div class="mb-4 flex flex-row items-center gap-4">
+				<Label for="name" class="min-w-max">Product Brand:</Label>
 				<Input id="name" bind:value={add_product_form.product_brand} class="col-span-3" />
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						<Button variant="outline">Brand List</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content>
+						<DropdownMenu.Group>
+							{#each current_brand_list as brand}
+								<DropdownMenu.Item
+									on:click={() => {
+										add_product_form.product_brand = brand.product_brand;
+									}}>{brand.product_brand}</DropdownMenu.Item
+								>
+							{/each}
+						</DropdownMenu.Group>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			</div>
 			<div class="flex flex-col gap-4">
 				<Label for="name">Product Name:</Label>
@@ -564,7 +633,7 @@
 				/>
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
-						<Button variant="outline">...</Button>
+						<Button variant="outline">Type List</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
 						<DropdownMenu.Group>
@@ -610,6 +679,21 @@
 				</div>
 			</div>
 			<div class="flex flex-row items-center justify-between gap-4">
+				<Label for="price">Unit Price:</Label>
+				<div class="flex flex-row items-center gap-4">
+					<span>Qty.</span>
+					<Input
+						id="price"
+						bind:value={add_product_form.stock}
+						class=""
+						type="number"
+						on:blur={() => {
+							add_product_form.stock = Math.abs(add_product_form.stock);
+						}}
+					/>
+				</div>
+			</div>
+			<div class="flex flex-row items-center justify-between gap-4">
 				<Label for="files">Images:</Label>
 				<div class="flex flex-row items-center gap-4">
 					<input id="files" bind:files type="file" multiple accept="image/png, image/jpeg" />
@@ -628,7 +712,8 @@
 							add_product_form.product_type,
 							add_product_form.unit_cost,
 							add_product_form.unit_price,
-							add_product_form.images
+							add_product_form.images,
+							add_product_form.stock
 						);
 						if (response == 200) {
 							toast.success('Action success', {
@@ -656,7 +741,7 @@
 <Dialog.Root open={updateStockDialog} closeOnEscape={true}>
 	<Dialog.Content>
 		<Dialog.Header class="pt-4">
-			<Dialog.Title>Add/Remove stock from {stock_product_form.item_name}</Dialog.Title>
+			<Dialog.Title>Add/Sell/Outgoing stock from {stock_product_form.item_name}</Dialog.Title>
 		</Dialog.Header>
 		<div class="grid gap-2 pt-8">
 			<div class="flex flex-row items-center gap-4">
@@ -670,24 +755,15 @@
 			</div>
 		</div>
 		<div class="flex w-full">
-			<Tabs.Root value="add" class="w-max">
+			<Tabs.Root class="w-max" bind:value={tab_value}>
 				<Tabs.List>
-					<Tabs.Trigger
-						value="add"
-						on:click={() => {
-							stock_product_form.action = 'add';
-						}}>Add stock</Tabs.Trigger
-					>
-					<Tabs.Trigger
-						value="remove"
-						on:click={() => {
-							stock_product_form.action = 'remove';
-						}}>Remove stock</Tabs.Trigger
-					>
+					<Tabs.Trigger value="add">Add stock</Tabs.Trigger>
+					<Tabs.Trigger value="remove">Sell stock</Tabs.Trigger>
+					<Tabs.Trigger value="outgoing">Outgoing</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value="add">
 					<div class="ml-1 mt-4 flex flex-row items-center gap-4">
-						<Label for="name" class="min-w-max">Add New Stock:</Label>
+						<Label for="name" class="min-w-max">Add Quantity:</Label>
 						<Input
 							id="name"
 							bind:value={stock_count}
@@ -706,29 +782,133 @@
 					</div>
 				</Tabs.Content>
 				<Tabs.Content value="remove">
-					<div class="ml-1 mt-4 flex flex-row items-center gap-4">
-						<Label for="name" class="min-w-max">Remove Stock:</Label>
-						<Input
-							id="name"
-							bind:value={stock_count}
-							type="number"
-							class="w-min"
-							on:blur={() => {
-								stock_count = parseInt(stock_count.toString());
-								if (stock_count < 0 || isNaN(stock_count) || stock_count == null) {
-									toast.error('Number error', {
-										description: 'The number you entered is not valid.'
-									});
-									stock_count = 0;
-								}
-								if (stock_count > stock_product_form.stock) {
-									toast.error('Number error', {
-										description: 'Stock to be removed exceeds current stock.'
-									});
-									stock_count = stock_product_form.stock;
-								}
-							}}
-						/>
+					<div class="ml-1 mt-4 flex flex-col gap-4">
+						<div class="flex flex-row items-center justify-between gap-4">
+							<Label for="name" class="min-w-max">Unit Price:</Label>
+							<div class="flex flex-row items-center justify-between gap-2">
+								<span class="font-bold">PHP</span>
+								<Input value={stock_product_form.unit_price} class="pointer-events-none" />
+							</div>
+						</div>
+
+						<div class="flex flex-row items-center justify-between gap-4">
+							<Label for="name" class="min-w">Sell Quantity:</Label>
+							<Input
+								id="name"
+								bind:value={stock_count}
+								type="number"
+								class="w-min"
+								on:change={() => {
+									calculate_receipt(stock_product_form.discount);
+								}}
+								on:blur={() => {
+									stock_count = parseInt(stock_count.toString());
+									if (stock_count < 0 || isNaN(stock_count) || stock_count == null) {
+										toast.error('Number error', {
+											description: 'The number you entered is not valid.'
+										});
+										stock_count = 0;
+									}
+									if (stock_count > stock_product_form.stock) {
+										toast.error('Number error', {
+											description: 'Stock to be removed exceeds current stock.'
+										});
+										stock_count = stock_product_form.stock;
+									}
+								}}
+							/>
+						</div>
+						<div class="flex flex-row items-center justify-between gap-4">
+							<Label for="name" class="min-w-max">Apply Discount:</Label>
+							<div class="flex flex-row items-center justify-between gap-2">
+								<span class="font-bold">%</span>
+								<Input
+									bind:value={stock_product_form.discount}
+									type="number"
+									on:change={() => {
+										calculate_receipt(stock_product_form.discount);
+									}}
+									on:blur={() => {
+										let discount = stock_product_form.discount;
+										if (discount < 0 || isNaN(discount) || discount == null || discount > 100) {
+											toast.error('Number error', {
+												description: 'The discount percentage you entered is not valid.'
+											});
+											stock_product_form.discount = 0;
+										}
+									}}
+								/>
+							</div>
+						</div>
+						<div class="flex flex-row items-center justify-between gap-4">
+							<Label for="name" class="min-w-max">Total Price:</Label>
+							<div class="flex flex-row items-center justify-between gap-2">
+								<span class="font-bold">PHP</span>
+								<Input
+									bind:value={stock_product_form.total_price}
+									type="number"
+									class="pointer-events-none"
+								/>
+							</div>
+						</div>
+					</div>
+				</Tabs.Content>
+				<Tabs.Content value="outgoing">
+					<div class="ml-1 mt-4 flex flex-col gap-4">
+						<div class="flex flex-row items-center justify-between gap-4">
+							<Label for="name" class="min-w-max">Outgoing quantity:</Label>
+							<Input
+								id="name"
+								bind:value={stock_count}
+								type="number"
+								class="w-min"
+								on:blur={() => {
+									stock_count = parseInt(stock_count.toString());
+									if (stock_count < 0 || isNaN(stock_count) || stock_count == null) {
+										toast.error('Number error', {
+											description: 'The number you entered is not valid.'
+										});
+										stock_count = 0;
+									}
+									if (stock_count > stock_product_form.stock) {
+										toast.error('Number error', {
+											description: 'Stock to be removed exceeds current stock.'
+										});
+										stock_count = stock_product_form.stock;
+									}
+								}}
+							/>
+						</div>
+						<div class="flex min-w-max flex-row items-center justify-between gap-4">
+							<Label for="" class="min-w-max">Reason:</Label>
+							<div class="flex flex-row items-center gap-2">
+								<Input id="" bind:value={outgoing_form.reason} class="w-min" />
+								<DropdownMenu.Root>
+									<DropdownMenu.Trigger>
+										<Button variant="outline">...</Button>
+									</DropdownMenu.Trigger>
+									<DropdownMenu.Content>
+										<DropdownMenu.Group>
+											{#each reason_list as reason}
+												<DropdownMenu.Item
+													on:click={() => {
+														outgoing_form.reason = reason;
+													}}>{reason}</DropdownMenu.Item
+												>
+											{/each}
+										</DropdownMenu.Group>
+									</DropdownMenu.Content>
+								</DropdownMenu.Root>
+							</div>
+						</div>
+						{#if outgoing_form.reason == reason_list[0]}
+							<div class="flex flex-row items-center justify-between gap-4">
+								<Label for="" class="min-w-max">Recipient:</Label>
+								<div class="flex flex-row items-center gap-2">
+									<Input id="" bind:value={outgoing_form.recipient} class="w-min" />
+								</div>
+							</div>
+						{/if}
 					</div>
 				</Tabs.Content>
 			</Tabs.Root>
@@ -741,8 +921,10 @@
 							stock_product_form.id,
 							stock_product_form.item_name,
 							stock_product_form.stock,
-							stock_product_form.action,
-							stock_count
+							tab_value,
+							stock_count,
+							outgoing_form,
+							stock_product_form.discount
 						);
 						if (response == 200) {
 							toast.success('Action success', {

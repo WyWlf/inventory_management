@@ -16,12 +16,17 @@ export async function POST({ request }) {
             type: product_table.product_type
         }).from(product_table).orderBy(product_table.product_type)
 
+        const brand_list: any = await db.selectDistinct({
+            product_brand: product_table.product_brand
+        }).from(product_table).orderBy(product_table.product_brand)
+
         if (query) {
             return new Response(JSON.stringify({
                 status: 200,
                 data: query,
                 unique_list: unique_product_name,
-                types: types
+                types: types,
+                brands: brand_list
             }))
         } else {
             return new Response(JSON.stringify({

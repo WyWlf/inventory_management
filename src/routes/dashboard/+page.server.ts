@@ -28,7 +28,7 @@ export const load = (async () => {
 
         const total_inventory_cost: any = await db.select({ total_cost: inventory_cost.total_cost }).from(inventory_cost)
 
-        const total_profit: any = await db.select({ total_profit: inventory_cost.total_profit }).from(inventory_cost)
+        // const total_profit: any = await db.select({ total_profit: inventory_cost.total_profit }).from(inventory_cost)
 
         const top_selling_metric: any = await db.select({
             item_name: sales_history.item_name,
@@ -45,10 +45,10 @@ export const load = (async () => {
             total_stock: sql<number>`SUM(${product_table.stock}) as total_stock`,
         }).from(product_table).groupBy(product_table.item_name).orderBy(asc(sql`total_stock`)).limit(5)
 
-        const events: any = await db.select({
-            inventory_history,
-            formattedTime: sql<string>`CONCAT(DATE_FORMAT(time, '%h:%i %p'),' / ',DATE_FORMAT(time, '%M-%d-%Y'))`
-        }).from(inventory_history).orderBy(desc(inventory_history.id)).limit(10)
+        // const events: any = await db.select({
+        //     inventory_history,
+        //     formattedTime: sql<string>`CONCAT(DATE_FORMAT(time, '%h:%i %p'),' / ',DATE_FORMAT(time, '%M-%d-%Y'))`
+        // }).from(inventory_history).orderBy(desc(inventory_history.id)).limit(10)
 
         return {
             this_day_revenue,
@@ -60,8 +60,8 @@ export const load = (async () => {
             low_selling_metric,
             low_stock_metric,
             total_inventory_cost,
-            total_profit,
-            events
+            // total_profit,
+            // events
         }
     }
     return {

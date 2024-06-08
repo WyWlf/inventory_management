@@ -1,4 +1,4 @@
-export async function add_product(brand: string, product_name: string, description: string, product_type: string, unit_cost: number, unit_price: number, images: string) {
+export async function add_product(brand: string, product_name: string, description: string, product_type: string, unit_cost: number, unit_price: number, images: string, stock: number) {
     const res = await fetch('/api/add_product', {
         method: 'POST',
         body: JSON.stringify({
@@ -8,7 +8,8 @@ export async function add_product(brand: string, product_name: string, descripti
             product_type,
             unit_cost,
             unit_price,
-            images
+            images,
+            stock
         }),
         headers: {
             'Content-Type': 'application/json'
@@ -53,7 +54,7 @@ export async function update_product(brand: string, id: number, item_name: strin
     return response.status
 }
 
-export async function update_stock(id: number, item_name: string, stock: number, action: string, value: number) {
+export async function update_stock(id: number, item_name: string, stock: number, action: string, value: number, outgoing_form: { reason: string, recipient: string }, discount: number) {
     let new_stock_value = 0;
 
     async function create_transaction() {
@@ -61,7 +62,8 @@ export async function update_stock(id: number, item_name: string, stock: number,
             method: 'POST',
             body: JSON.stringify({
                 id,
-                value
+                value,
+                discount
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -70,6 +72,7 @@ export async function update_stock(id: number, item_name: string, stock: number,
         const response = await transaction.json();
         return response.status
     }
+
     switch (action) {
         case 'add':
             new_stock_value = stock + value
@@ -81,6 +84,9 @@ export async function update_stock(id: number, item_name: string, stock: number,
             } else {
                 new_stock_value = stock
             }
+            break;
+        case 'outgoing':
+            new_stock_value = stock - value
             break;
         default:
             new_stock_value = stock
@@ -94,7 +100,9 @@ export async function update_stock(id: number, item_name: string, stock: number,
             new_stock_value,
             action,
             value,
-            item_name
+            item_name,
+            recipient: outgoing_form.recipient,
+            reason: outgoing_form.reason
         }),
         headers: {
             'Content-Type': 'application/json'

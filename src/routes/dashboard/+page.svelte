@@ -43,20 +43,20 @@
 			item_name: string;
 			total_stock: number;
 		}[];
-		events: {
-			inventory_history: {
-				id: number;
-				username: string;
-				action: string;
-			};
-			formattedTime: string;
-		}[];
+		// events: {
+		// 	inventory_history: {
+		// 		id: number;
+		// 		username: string;
+		// 		action: string;
+		// 	};
+		// 	formattedTime: string;
+		// }[];
 		total_inventory_cost: {
 			0: { total_cost: number | null };
 		};
-		total_profit: {
-			0: { total_profit: number | null };
-		};
+		// total_profit: {
+		// 	0: { total_profit: number | null };
+		// };
 	};
 
 	let day_revenue_growth = 0;
@@ -187,7 +187,7 @@
 					</Card.Content>
 				</Card.Root>
 				<!---------------Profit Card-------------->
-				<Card.Root class="w-full">
+				<!-- <Card.Root class="w-full">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
 							<Card.Title>Total Profit</Card.Title>
@@ -202,7 +202,7 @@
 							Money generated after deducting business cost from the revenue
 						</p>
 					</Card.Content>
-				</Card.Root>
+				</Card.Root> -->
 			</div>
 		</div>
 	</div>
@@ -310,7 +310,7 @@
 				</Card.Root>
 			</div>
 		</div>
-		<hr />
+		<!-- <hr />
 		<div class="flex w-full flex-row gap-4 border-black p-4 dark:border-white">
 			<Card.Root class="min-h-[50vh] w-full border-none">
 				<Card.Header>
@@ -344,6 +344,6 @@
 					</Table.Root>
 				</Card.Content>
 			</Card.Root>
-		</div>
+		</div> -->
 	</div>
 </div>

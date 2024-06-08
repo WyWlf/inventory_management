@@ -13,10 +13,16 @@ export const load = (async () => {
         const unique_product_name: any = await db.selectDistinct({
             item_name: product_table.item_name
         }).from(product_table).orderBy(product_table.item_name)
+
+        const unique_brand_name: any = await db.selectDistinct({
+            product_brand: product_table.product_brand
+        }).from(product_table).orderBy(product_table.product_brand)
+
         return {
             query,
             types,
-            unique_product_name
+            unique_product_name,
+            unique_brand_name
         }
     }
     return {
