@@ -225,7 +225,7 @@
 			stock_product_form.total_price = parseFloat(
 				(initial_price - initial_price * discount_percentage).toFixed(2)
 			);
-		} else if (discount === 0) {
+		} else if (discount == 0) {
 			stock_product_form.total_price = parseFloat(initial_price.toFixed(2));
 		}
 	}
@@ -815,6 +815,7 @@
 										});
 										stock_count = stock_product_form.stock;
 									}
+									calculate_receipt(stock_product_form.discount);
 								}}
 							/>
 						</div>
@@ -836,6 +837,7 @@
 											});
 											stock_product_form.discount = 0;
 										}
+										calculate_receipt(stock_product_form.discount);
 									}}
 								/>
 							</div>

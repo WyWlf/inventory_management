@@ -8,6 +8,7 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { log_in } from './login';
 	import { onMount } from 'svelte';
+	import img from '../public/bg.jpg'
 	let remember = false;
 	let username = '';
 	let password = '';
@@ -35,7 +36,7 @@
 	});
 </script>
 
-<div class="flex min-h-[100vh] w-full items-center justify-center dark:bg-slate-600" class:bgImage={true}>
+<div class="flex min-h-[100vh] w-full items-center justify-center dark:bg-slate-600">
 	<div
 		class="m-4 flex min-h-[70vh] min-w-[20vw] flex-col items-center rounded-2xl border-2 bg-stone-50 max-xl:min-w-[50vw]"
 	>
@@ -86,10 +87,3 @@
 </div>
 
 <Toaster />
-
-
-<style>
-	.bgImage {
-		background-image: url('bg.jfif');
-	}
-</style>
