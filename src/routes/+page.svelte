@@ -8,7 +8,6 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { log_in } from './login';
 	import { onMount } from 'svelte';
-	import img from '../public/bg.jpg'
 	let remember = false;
 	let username = '';
 	let password = '';

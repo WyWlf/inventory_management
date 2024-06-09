@@ -847,7 +847,7 @@
 							<div class="flex flex-row items-center justify-between gap-2">
 								<span class="font-bold">PHP</span>
 								<Input
-									value={(stock_product_form.discount > 0) ? (stock_product_form.unit_price * stock_count) - stock_product_form.total_price : 0}
+									value={(stock_product_form.discount > 0) ? ((stock_product_form.unit_price * stock_count) - stock_product_form.total_price).toFixed(2) : 0}
 									type="number"
 									class="pointer-events-none"
 									tabindex={-1}
