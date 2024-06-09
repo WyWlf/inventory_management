@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2024 at 02:27 PM
+-- Generation Time: Jun 09, 2024 at 02:13 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -55,6 +55,22 @@ CREATE TABLE `inventory_history` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `outgoing_history`
+--
+
+CREATE TABLE `outgoing_history` (
+  `id` int(11) NOT NULL,
+  `username` text NOT NULL,
+  `reason` text NOT NULL,
+  `product_name` text NOT NULL,
+  `recipient` text NOT NULL,
+  `qty` int(11) NOT NULL,
+  `time` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `products`
 --
 
@@ -81,6 +97,8 @@ CREATE TABLE `sales_history` (
   `item_id` int(11) NOT NULL,
   `item_name` text NOT NULL,
   `units` int(11) NOT NULL,
+  `discount` int(11) NOT NULL DEFAULT 0,
+  `price_discounted` int(11) NOT NULL DEFAULT 0,
   `price_unit` double NOT NULL,
   `total_cost` double NOT NULL,
   `time` datetime NOT NULL DEFAULT current_timestamp()
@@ -98,15 +116,16 @@ CREATE TABLE `users` (
   `full_name` text DEFAULT NULL,
   `address` text DEFAULT NULL,
   `phone_number` text DEFAULT NULL,
-  `password` text NOT NULL
+  `password` text NOT NULL,
+  `role` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `full_name`, `address`, `phone_number`, `password`) VALUES
-(8, 'admin', 'admin', ' ', '', '$2b$10$/HDjM8/7Qy5HNBx7A7Ey4Oy37/B/tyfGmpRECilDvbX2b3hxn4Kn2');
+INSERT INTO `users` (`id`, `username`, `full_name`, `address`, `phone_number`, `password`, `role`) VALUES
+(8, 'admin', 'admin', ' ', '', '$2b$10$/HDjM8/7Qy5HNBx7A7Ey4Oy37/B/tyfGmpRECilDvbX2b3hxn4Kn2', 1);
 
 --
 -- Indexes for dumped tables
@@ -116,6 +135,12 @@ INSERT INTO `users` (`id`, `username`, `full_name`, `address`, `phone_number`, `
 -- Indexes for table `inventory_history`
 --
 ALTER TABLE `inventory_history`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `outgoing_history`
+--
+ALTER TABLE `outgoing_history`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -144,25 +169,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `inventory_history`
 --
 ALTER TABLE `inventory_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+
+--
+-- AUTO_INCREMENT for table `outgoing_history`
+--
+ALTER TABLE `outgoing_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `sales_history`
 --
 ALTER TABLE `sales_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
